@@ -1,4 +1,4 @@
-package hu.futureofmedia.task.contactsapi.entities;
+package hu.futureofmedia.task.contactsapi.model.entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
