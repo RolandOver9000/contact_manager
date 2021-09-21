@@ -1,6 +1,7 @@
 package hu.futureofmedia.task.contactsapi.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
@@ -11,7 +12,10 @@ public class ContactPerson {
     private Long id;
     private String firstName;
     private String lastName;
+
+    @Email
     private String email;
+
     private String phoneNumber;
 
     @OneToOne()
