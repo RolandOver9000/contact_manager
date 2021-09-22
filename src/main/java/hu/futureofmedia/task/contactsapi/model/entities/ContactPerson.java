@@ -1,10 +1,13 @@
 package hu.futureofmedia.task.contactsapi.model.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
+@Data
 public class ContactPerson {
 
     @Id
