@@ -27,23 +27,23 @@ public class ContactPersonService {
         List<ContactPerson> foundContacts = contactPersonRepository
                 .findAllByStatus(Status.ACTIVE, sortedByFirstNameDesc).getContent();
         return foundContacts.stream()
-                .map(this::transformContactPerson)
+                .map(this::transformToListedContactPerson)
                 .collect(Collectors.toList());
     }
 
-    private OutgoingListedContactPersonDto transformContactPerson(ContactPerson contactPerson) {
+    public OutgoingListedContactPersonDto getContactPersonById(Long id) {
+        return contactPersonRepository
+                .findById(id)
+                .map(this::transformToListedContactPerson)
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
+    }
+
+    private OutgoingListedContactPersonDto transformToListedContactPerson(ContactPerson contactPerson) {
         return OutgoingListedContactPersonDto.builder()
                 .companyName(contactPerson.getCompany().getName())
                 .email(contactPerson.getEmail())
                 .fullName(contactPerson.getFirstName() + " " + contactPerson.getLastName())
                 .phoneNumber(contactPerson.getPhoneNumber())
                 .build();
-    }
-
-    public OutgoingListedContactPersonDto getContactPersonById(Long id) {
-        return contactPersonRepository
-                .findById(id)
-                .map(this::transformContactPerson)
-                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
     }
 }
