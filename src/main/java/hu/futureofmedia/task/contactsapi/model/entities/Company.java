@@ -1,4 +1,4 @@
-package hu.futureofmedia.task.contactsapi.entities;
+package hu.futureofmedia.task.contactsapi.model.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
