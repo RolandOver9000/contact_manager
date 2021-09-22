@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,5 +38,12 @@ public class ContactPersonService {
                 .fullName(contactPerson.getFirstName() + " " + contactPerson.getLastName())
                 .phoneNumber(contactPerson.getPhoneNumber())
                 .build();
+    }
+
+    public OutgoingContactPerson getContactPersonById(Long id) {
+        return contactPersonRepository
+                .findById(id)
+                .map(this::transformContactPerson)
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
     }
 }
