@@ -32,10 +32,10 @@ public class ContactPersonService {
                 .collect(Collectors.toList());
     }
 
-    public OutgoingListedContactPersonDto getContactPersonById(Long id) {
+    public OutgoingDetailedContactPersonDto getContactPersonById(Long id) {
         return contactPersonRepository
                 .findById(id)
-                .map(this::transformToListedContactPerson)
+                .map(this::transformToDetailedContactPerson)
                 .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
     }
 

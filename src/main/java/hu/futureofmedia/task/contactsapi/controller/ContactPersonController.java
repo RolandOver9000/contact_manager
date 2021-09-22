@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.controller;
 
+import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.service.ContactPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ContactPersonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OutgoingListedContactPersonDto> getContactPersonById(@PathVariable(value="id") Long id) {
+    public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonById(@PathVariable(value="id") Long id) {
         try {
             return ResponseEntity.ok(contactPersonService.getContactPersonById(id));
         } catch (Exception e) {
