@@ -20,7 +20,7 @@ public class ContactPersonService {
     private ContactPersonRepository  contactPersonRepository;
     private static final int NUMBER_OF_CONTACTS_PER_PAGE = 10;
 
-    public List<OutgoingContactPerson> getAllActiveContactPersonOnPage(int pageNumber) {
+    public List<OutgoingContactPerson> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
         Pageable sortedByFirstNameDesc =
                 PageRequest.of(pageNumber, NUMBER_OF_CONTACTS_PER_PAGE, Sort.by("firstName").ascending());
         List<ContactPerson> foundContacts = contactPersonRepository

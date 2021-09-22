@@ -22,7 +22,8 @@ public class ContactPersonController {
     public ResponseEntity<List<OutgoingContactPerson>> getAllActiveContactPersonsByPage(
                                                         @RequestParam("page") int pageNumber) {
         try {
-            return ResponseEntity.ok(contactPersonService.getAllActiveContactPersonOnPage(pageNumber));
+            return ResponseEntity.ok(contactPersonService
+                    .getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting active contacts on page: " + pageNumber);
