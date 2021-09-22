@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class OutgoingContactPerson {
+public class OutgoingListedContactPersonDto {
 
     private String fullName;
     private String companyName;

@@ -1,6 +1,6 @@
 package hu.futureofmedia.task.contactsapi.service;
 
-import hu.futureofmedia.task.contactsapi.model.dto.OutgoingContactPerson;
+import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.model.entities.Status;
 import hu.futureofmedia.task.contactsapi.repositories.ContactPersonRepository;
@@ -21,7 +21,7 @@ public class ContactPersonService {
     private ContactPersonRepository  contactPersonRepository;
     private static final int NUMBER_OF_CONTACTS_PER_PAGE = 10;
 
-    public List<OutgoingContactPerson> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
+    public List<OutgoingListedContactPersonDto> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
         Pageable sortedByFirstNameDesc =
                 PageRequest.of(pageNumber, NUMBER_OF_CONTACTS_PER_PAGE, Sort.by("firstName").ascending());
         List<ContactPerson> foundContacts = contactPersonRepository
@@ -31,8 +31,8 @@ public class ContactPersonService {
                 .collect(Collectors.toList());
     }
 
-    private OutgoingContactPerson transformContactPerson(ContactPerson contactPerson) {
-        return OutgoingContactPerson.builder()
+    private OutgoingListedContactPersonDto transformContactPerson(ContactPerson contactPerson) {
+        return OutgoingListedContactPersonDto.builder()
                 .companyName(contactPerson.getCompany().getName())
                 .email(contactPerson.getEmail())
                 .fullName(contactPerson.getFirstName() + " " + contactPerson.getLastName())
@@ -40,7 +40,7 @@ public class ContactPersonService {
                 .build();
     }
 
-    public OutgoingContactPerson getContactPersonById(Long id) {
+    public OutgoingListedContactPersonDto getContactPersonById(Long id) {
         return contactPersonRepository
                 .findById(id)
                 .map(this::transformContactPerson)
