@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.service;
 
+import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.model.entities.Status;
@@ -44,6 +45,19 @@ public class ContactPersonService {
                 .email(contactPerson.getEmail())
                 .fullName(contactPerson.getFirstName() + " " + contactPerson.getLastName())
                 .phoneNumber(contactPerson.getPhoneNumber())
+                .build();
+    }
+
+    private OutgoingDetailedContactPersonDto transformToDetailedContactPerson(ContactPerson contactPerson) {
+        return OutgoingDetailedContactPersonDto.builder()
+                .firstName(contactPerson.getFirstName())
+                .lastName(contactPerson.getLastName())
+                .companyName(contactPerson.getCompany().getName())
+                .email(contactPerson.getEmail())
+                .phoneNumber(contactPerson.getPhoneNumber())
+                .comment(contactPerson.getComment())
+                .creationDateTime(contactPerson.getCreationDateTime())
+                .updateDateTime(contactPerson.getUpdateDateTime())
                 .build();
     }
 }
