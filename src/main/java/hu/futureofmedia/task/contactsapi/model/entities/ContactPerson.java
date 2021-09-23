@@ -36,7 +36,7 @@ public class ContactPerson {
     @ValidE164Format
     private String phoneNumber;
 
-    @OneToOne()
+    @ManyToOne()
     @NotNull
     private Company company;
 
