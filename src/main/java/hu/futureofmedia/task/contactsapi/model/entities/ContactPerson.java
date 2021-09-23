@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.model.entities;
 
+import hu.futureofmedia.task.contactsapi.validator.annotation.ValidE164Format;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -22,25 +23,22 @@ public class ContactPerson {
     @GeneratedValue
     private Long id;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String firstName;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String lastName;
 
     @Email
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String email;
 
+    @ValidE164Format
     private String phoneNumber;
 
     @OneToOne()
     @NotNull
     private Company company;
-
 
     private String comment;
 
