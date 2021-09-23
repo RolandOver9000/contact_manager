@@ -33,7 +33,7 @@ public class ContactPersonController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonById(
+    public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonByEmail(
             @PathVariable(value="email") String email) {
         try {
             return ResponseEntity.ok(contactPersonService.getContactPersonById(email));
