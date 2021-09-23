@@ -7,8 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ContactPersonRepository extends PagingAndSortingRepository<ContactPerson, Long> {
 
     Page<ContactPerson> findAllByStatus(Status status, Pageable pageable);
+
+    Optional<ContactPerson> findByEmail(String email);
 }
