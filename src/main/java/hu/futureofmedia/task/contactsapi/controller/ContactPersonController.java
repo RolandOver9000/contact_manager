@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.controller;
 
+import hu.futureofmedia.task.contactsapi.model.dto.IncomingContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.service.ContactPersonService;
@@ -38,6 +39,17 @@ public class ContactPersonController {
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by id: " + id);
+        }
+    }
+
+    @PostMapping("")
+    public ResponseEntity<String> saveContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+        try {
+            contactPersonService.saveContactPerson(contactPersonDto);
+            return ResponseEntity.ok("Contact person saved successfully.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during saving contact.");
         }
     }
 
