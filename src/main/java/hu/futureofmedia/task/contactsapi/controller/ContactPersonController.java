@@ -65,4 +65,15 @@ public class ContactPersonController {
         }
     }
 
+    @DeleteMapping("/{email}")
+    public ResponseEntity<String> deleteContactPersonByEmail(@PathVariable(value="email") String email) {
+        try {
+            contactPersonService.changeContactPersonToDeletedByEmail(email);
+            return ResponseEntity.ok("Contact person deleted successfully.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during deleting contact.");
+        }
+    }
+
 }
