@@ -67,6 +67,14 @@ public class ContactPersonService {
         contactPersonRepository.save(updatedContactPerson);
     }
 
+    public void changeContactPersonToDeletedByEmail(String email) {
+        ContactPerson storedContactPerson = contactPersonRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " + email));
+        storedContactPerson.setStatus(Status.DELETED);
+        contactPersonRepository.save(storedContactPerson);
+    }
+
     private ContactPerson transformIncomingContactPersonToContactPerson(IncomingContactPersonDto contactPersonDto, Company contactCompany) {
         return ContactPerson.builder()
                 .firstName(contactPersonDto.getFirstName())
