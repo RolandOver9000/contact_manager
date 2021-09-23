@@ -1,9 +1,12 @@
 package hu.futureofmedia.task.contactsapi.service;
 
+import hu.futureofmedia.task.contactsapi.model.dto.IncomingContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
+import hu.futureofmedia.task.contactsapi.model.entities.Company;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.model.entities.Status;
+import hu.futureofmedia.task.contactsapi.repositories.CompanyRepository;
 import hu.futureofmedia.task.contactsapi.repositories.ContactPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,8 @@ public class ContactPersonService {
 
     @Autowired
     private ContactPersonRepository  contactPersonRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
     private static final int NUMBER_OF_CONTACTS_PER_PAGE = 10;
 
     public List<OutgoingListedContactPersonDto> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
@@ -37,6 +42,28 @@ public class ContactPersonService {
                 .findById(id)
                 .map(this::transformToDetailedContactPerson)
                 .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
+    }
+
+
+    public void saveContactPerson(IncomingContactPersonDto contactPersonDto) {
+        Company contactCompany = companyRepository
+                .findByName(contactPersonDto.getCompanyName())
+                .orElseThrow(() -> new EntityNotFoundException("Company not found by name: " +
+                        contactPersonDto.getCompanyName()));
+        ContactPerson contactPerson = transformIncomingContactPersonToContactPerson(contactPersonDto, contactCompany);
+        contactPersonRepository.save(contactPerson);
+    }
+
+    private ContactPerson transformIncomingContactPersonToContactPerson(IncomingContactPersonDto contactPersonDto, Company contactCompany) {
+        return ContactPerson.builder()
+                .firstName(contactPersonDto.getFirstName())
+                .lastName(contactPersonDto.getLastName())
+                .comment(contactPersonDto.getComment())
+                .company(contactCompany)
+                .email(contactPersonDto.getEmail())
+                .phoneNumber(contactPersonDto.getPhoneNumber())
+                .status(Status.ACTIVE)
+                .build();
     }
 
     private OutgoingListedContactPersonDto transformToListedContactPerson(ContactPerson contactPerson) {
