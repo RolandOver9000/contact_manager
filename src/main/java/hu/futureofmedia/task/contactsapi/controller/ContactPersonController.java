@@ -54,4 +54,15 @@ public class ContactPersonController {
         }
     }
 
+    @PutMapping("")
+    public ResponseEntity<String> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+        try {
+            contactPersonService.updateContactPerson(contactPersonDto);
+            return ResponseEntity.ok("Contact person updated successfully.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during updating contact.");
+        }
+    }
+
 }

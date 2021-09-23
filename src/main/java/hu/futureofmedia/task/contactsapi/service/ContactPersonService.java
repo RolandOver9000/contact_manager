@@ -54,6 +54,19 @@ public class ContactPersonService {
         contactPersonRepository.save(contactPerson);
     }
 
+    public void updateContactPerson(IncomingContactPersonDto contactPersonDto) {
+        ContactPerson storedContactPerson = contactPersonRepository
+                .findByEmail(contactPersonDto.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " +
+                        contactPersonDto.getEmail()));
+
+        ContactPerson updatedContactPerson = transformIncomingContactPersonToContactPerson(
+                contactPersonDto, storedContactPerson.getCompany());
+        updatedContactPerson.setId(storedContactPerson.getId());
+        updatedContactPerson.setCreationDateTime(storedContactPerson.getCreationDateTime());
+        contactPersonRepository.save(updatedContactPerson);
+    }
+
     private ContactPerson transformIncomingContactPersonToContactPerson(IncomingContactPersonDto contactPersonDto, Company contactCompany) {
         return ContactPerson.builder()
                 .firstName(contactPersonDto.getFirstName())
