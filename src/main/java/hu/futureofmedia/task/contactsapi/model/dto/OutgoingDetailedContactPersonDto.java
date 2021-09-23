@@ -1,12 +1,8 @@
 package hu.futureofmedia.task.contactsapi.model.dto;
 
-import hu.futureofmedia.task.contactsapi.model.entities.Company;
-import hu.futureofmedia.task.contactsapi.model.entities.Status;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Data
