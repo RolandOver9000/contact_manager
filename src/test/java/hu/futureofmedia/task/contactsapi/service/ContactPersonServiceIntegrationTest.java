@@ -42,6 +42,12 @@ public class ContactPersonServiceIntegrationTest {
     @Test
     public void testGetAllActiveContactPersonAscendingByFirstNameByPageShouldReturnEmptyList() {
         int pageNumber = 0;
+        companyRepository.save(companyMother.getTestCompany());
+        List<ContactPerson> deletedContactPersonList = new ArrayList<>(Arrays.asList(
+                contactPersonMother.getDeletedContactPerson(),
+                contactPersonMother.getDeletedContactPerson()
+        ));
+        contactPersonRepository.saveAll(deletedContactPersonList);
         contactPersonService.getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber);
 
         List<OutgoingListedContactPersonDto> actualResultList = contactPersonService
