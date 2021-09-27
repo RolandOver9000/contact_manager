@@ -36,7 +36,7 @@ public class ContactPersonController {
     public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonByEmail(
             @PathVariable(value="email") String email) {
         try {
-            return ResponseEntity.ok(contactPersonService.getContactPersonById(email));
+            return ResponseEntity.ok(contactPersonService.getContactPersonByEmail(email));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by email: " + email);
