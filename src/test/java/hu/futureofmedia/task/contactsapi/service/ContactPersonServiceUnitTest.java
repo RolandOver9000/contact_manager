@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @ActiveProfiles("test")
 @SpringBootTest
-public class ContactPersonServiceTest {
+public class ContactPersonServiceUnitTest {
 
     @InjectMocks
     ContactPersonService contactPersonService;
