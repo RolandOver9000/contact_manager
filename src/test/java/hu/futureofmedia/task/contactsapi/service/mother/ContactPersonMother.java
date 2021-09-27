@@ -58,4 +58,17 @@ public class ContactPersonMother {
                 .phoneNumber(contactPerson.getPhoneNumber())
                 .build();
     }
+
+    public OutgoingDetailedContactPersonDto transformToDetailedContactPerson(ContactPerson contactPerson) {
+        return OutgoingDetailedContactPersonDto.builder()
+                .firstName(contactPerson.getFirstName())
+                .lastName(contactPerson.getLastName())
+                .companyName(contactPerson.getCompany().getName())
+                .email(contactPerson.getEmail())
+                .phoneNumber(contactPerson.getPhoneNumber())
+                .comment(contactPerson.getComment())
+                .creationDateTime(contactPerson.getCreationDateTime())
+                .updateDateTime(contactPerson.getUpdateDateTime())
+                .build();
+    }
 }
