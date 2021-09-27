@@ -1,34 +1,37 @@
 package hu.futureofmedia.task.contactsapi.service.mother;
 
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
-import hu.futureofmedia.task.contactsapi.model.entities.Company;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.model.entities.Status;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactPersonMother {
+
+    @Autowired
+    CompanyMother companyMother;
 
     public ContactPerson getDeletedContactPerson() {
         return ContactPerson.builder()
                 .firstName("TestFirstName")
                 .lastName("TestLastName")
                 .comment("TestComment")
-                .email("TestEmail")
-                .phoneNumber("TestPhoneNumber")
-                .company(getTestCompany())
+                .email("testemail@gmail.com")
+                .phoneNumber("+36 20 555 5555")
+                .company(companyMother.getTestCompany())
                 .status(Status.DELETED)
                 .build();
     }
 
     public ContactPerson getActiveContactPersonWithFistName(String firstName) {
         return ContactPerson.builder()
-                .company(getTestCompany())
+                .company(companyMother.getTestCompany())
                 .firstName(firstName)
                 .lastName("TestLastName")
                 .comment("TestComment")
-                .email("TestEmail")
-                .phoneNumber("TestPhoneNumber")
+                .email("testemail@gmail.com")
+                .phoneNumber("+36 20 555 5555")
                 .status(Status.ACTIVE)
                 .build();
     }
@@ -41,11 +44,5 @@ public class ContactPersonMother {
                 .fullName(contactPerson.getFirstName() + " " + contactPerson.getLastName())
                 .phoneNumber(contactPerson.getPhoneNumber())
                 .build();
-    }
-
-    private Company getTestCompany() {
-        Company testCompany = new Company();
-        testCompany.setName("TestCompany");
-        return testCompany;
     }
 }
