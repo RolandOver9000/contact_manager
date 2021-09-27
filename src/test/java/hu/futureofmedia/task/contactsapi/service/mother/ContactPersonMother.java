@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.service.mother;
 
+import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.model.entities.Status;
@@ -31,6 +32,18 @@ public class ContactPersonMother {
                 .lastName("TestLastName")
                 .comment("TestComment")
                 .email("testemail@gmail.com")
+                .phoneNumber("+36 20 555 5555")
+                .status(Status.ACTIVE)
+                .build();
+    }
+
+    public ContactPerson getActiveContactPersonWithEmail(String email) {
+        return ContactPerson.builder()
+                .company(companyMother.getTestCompany())
+                .firstName("TestFirstName")
+                .lastName("TestLastName")
+                .comment("TestComment")
+                .email(email)
                 .phoneNumber("+36 20 555 5555")
                 .status(Status.ACTIVE)
                 .build();
