@@ -37,7 +37,7 @@ public class ContactPersonService {
                 .collect(Collectors.toList());
     }
 
-    public OutgoingDetailedContactPersonDto getContactPersonById(String email) {
+    public OutgoingDetailedContactPersonDto getContactPersonByEmail(String email) {
         return contactPersonRepository
                 .findByEmail(email)
                 .map(this::transformToDetailedContactPerson)
