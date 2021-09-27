@@ -1,5 +1,6 @@
 package hu.futureofmedia.task.contactsapi.service;
 
+import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.entities.ContactPerson;
 import hu.futureofmedia.task.contactsapi.repositories.CompanyRepository;
@@ -60,7 +61,6 @@ public class ContactPersonServiceIntegrationTest {
     public void testGetAllActiveContactPersonAscendingByFirstNameByPageShouldReturnTwoContactPersons() {
         int pageNumber = 0;
         companyRepository.save(companyMother.getTestCompany());
-        contactPersonService.getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber);
         ContactPerson firstContactPerson = contactPersonMother.getActiveContactPersonWithFistName("AAAAA");
         ContactPerson secondContactPerson = contactPersonMother.getActiveContactPersonWithFistName("BBBBB");
         List<ContactPerson> activeContactPersonList = new ArrayList<>(Arrays.asList(
@@ -84,5 +84,21 @@ public class ContactPersonServiceIntegrationTest {
 
         Assertions.assertEquals(2, actualResultList.size());
         Assertions.assertNotEquals(expectedActiveContactPersonsInWrongOrder, actualResultList);
+    }
+
+    @Test
+    public void testGetContactPersonByEmailShouldReturnProperContactPerson() {
+        String toBeFoundEmail = "validtestemail1@gmail.com";
+        ContactPerson toBeFoundContactPerson = contactPersonMother.getActiveContactPersonWithEmail(toBeFoundEmail);
+        companyRepository.save(companyMother.getTestCompany());
+        contactPersonRepository.save(toBeFoundContactPerson);
+        contactPersonRepository.save(contactPersonMother.getActiveContactPersonWithEmail("validtestemail2@gmail.com"));
+        contactPersonRepository.save(contactPersonMother.getDeletedContactPerson());
+
+        OutgoingDetailedContactPersonDto expectedContactPerson = contactPersonMother
+                .transformToDetailedContactPerson(toBeFoundContactPerson);
+        OutgoingDetailedContactPersonDto actualContactPerson = contactPersonService.getContactPersonByEmail(toBeFoundEmail);
+
+        Assertions.assertEquals(expectedContactPerson, actualContactPerson);
     }
 }
