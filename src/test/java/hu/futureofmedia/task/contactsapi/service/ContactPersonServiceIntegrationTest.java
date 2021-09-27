@@ -49,4 +49,34 @@ public class ContactPersonServiceIntegrationTest {
 
         Assertions.assertEquals(Collections.emptyList(), actualResultList);
     }
+
+    @Test
+    public void testGetAllActiveContactPersonAscendingByFirstNameByPageShouldReturnTwoContactPersons() {
+        int pageNumber = 0;
+        companyRepository.save(companyMother.getTestCompany());
+        contactPersonService.getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber);
+        ContactPerson firstContactPerson = contactPersonMother.getActiveContactPersonWithFistName("AAAAA");
+        ContactPerson secondContactPerson = contactPersonMother.getActiveContactPersonWithFistName("BBBBB");
+        List<ContactPerson> activeContactPersonList = new ArrayList<>(Arrays.asList(
+                secondContactPerson, firstContactPerson));
+        List<ContactPerson> deletedContactPersonList = new ArrayList<>(Arrays.asList(
+                contactPersonMother.getDeletedContactPerson(),
+                contactPersonMother.getDeletedContactPerson()
+        ));
+        List<ContactPerson> allContactPersons = new ArrayList<>();
+        allContactPersons.addAll(activeContactPersonList);
+        allContactPersons.addAll(deletedContactPersonList);
+        contactPersonRepository.saveAll(allContactPersons);
+
+        List<OutgoingListedContactPersonDto> expectedActiveContactPersonsInWrongOrder = activeContactPersonList
+                .stream()
+                .map(contactPersonMother::transformContactPersonToOutgoingListedContactPerson)
+                .collect(Collectors.toList());
+
+        List<OutgoingListedContactPersonDto> actualResultList = contactPersonService
+                .getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber);
+
+        Assertions.assertEquals(2, actualResultList.size());
+        Assertions.assertNotEquals(expectedActiveContactPersonsInWrongOrder, actualResultList);
+    }
 }
