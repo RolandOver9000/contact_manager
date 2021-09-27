@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import javax.persistence.EntityNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,5 +101,14 @@ public class ContactPersonServiceIntegrationTest {
         OutgoingDetailedContactPersonDto actualContactPerson = contactPersonService.getContactPersonByEmail(toBeFoundEmail);
 
         Assertions.assertEquals(expectedContactPerson, actualContactPerson);
+    }
+
+    @Test
+    public void testGetContactPersonByEmailShouldReturnEntityNotFoundException() {
+        String toBeFoundEmail = "validtestemail1@gmail.com";
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> {
+            contactPersonService.getContactPersonByEmail(toBeFoundEmail);
+        });
     }
 }
