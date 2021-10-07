@@ -54,10 +54,11 @@ public class ContactPersonController {
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<String> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto,
+                                                      @PathVariable(value="id") long id) {
         try {
-            contactPersonService.updateContactPerson(contactPersonDto);
+            contactPersonService.updateContactPersonById(contactPersonDto, id);
             return ResponseEntity.ok("Contact person updated successfully.");
         } catch (Exception e) {
             throw new ResponseStatusException(

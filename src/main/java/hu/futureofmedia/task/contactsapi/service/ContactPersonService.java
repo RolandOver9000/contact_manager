@@ -54,9 +54,9 @@ public class ContactPersonService {
         contactPersonRepository.save(contactPerson);
     }
 
-    public void updateContactPerson(IncomingContactPersonDto contactPersonDto) {
+    public void updateContactPersonById(IncomingContactPersonDto contactPersonDto, long id) {
         ContactPerson storedContactPerson = contactPersonRepository
-                .findByEmail(contactPersonDto.getEmail())
+                .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " +
                         contactPersonDto.getEmail()));
 
