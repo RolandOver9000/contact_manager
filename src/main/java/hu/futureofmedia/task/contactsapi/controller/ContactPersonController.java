@@ -32,14 +32,14 @@ public class ContactPersonController {
         }
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{id}")
     public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonByEmail(
-            @PathVariable(value="email") String email) {
+            @PathVariable(value="id") long id) {
         try {
-            return ResponseEntity.ok(contactPersonService.getContactPersonByEmail(email));
+            return ResponseEntity.ok(contactPersonService.getContactPersonById(id));
         } catch (Exception e) {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by email: " + email);
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by id: " + id);
         }
     }
 

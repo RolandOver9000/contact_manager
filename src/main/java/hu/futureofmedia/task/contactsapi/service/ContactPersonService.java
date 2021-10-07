@@ -37,11 +37,11 @@ public class ContactPersonService {
                 .collect(Collectors.toList());
     }
 
-    public OutgoingDetailedContactPersonDto getContactPersonByEmail(String email) {
+    public OutgoingDetailedContactPersonDto getContactPersonById(long id) {
         return contactPersonRepository
-                .findByEmail(email)
+                .findById(id)
                 .map(this::transformToDetailedContactPerson)
-                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " + email));
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
     }
 
 
