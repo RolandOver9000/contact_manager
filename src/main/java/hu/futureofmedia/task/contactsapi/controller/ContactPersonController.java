@@ -4,6 +4,7 @@ import hu.futureofmedia.task.contactsapi.model.dto.IncomingContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.service.ContactPersonService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,10 +45,9 @@ public class ContactPersonController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> saveContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+    public ResponseEntity<Long> saveContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
         try {
-            contactPersonService.saveContactPerson(contactPersonDto);
-            return ResponseEntity.ok("Contact person saved successfully.");
+            return ResponseEntity.ok(contactPersonService.saveContactPerson(contactPersonDto));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during saving contact.");
@@ -55,11 +55,10 @@ public class ContactPersonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto,
+    public ResponseEntity<Long> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto,
                                                       @PathVariable(value="id") long id) {
         try {
-            contactPersonService.updateContactPersonById(contactPersonDto, id);
-            return ResponseEntity.ok("Contact person updated successfully.");
+            return ResponseEntity.ok(contactPersonService.updateContactPersonById(contactPersonDto, id));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during updating contact.");

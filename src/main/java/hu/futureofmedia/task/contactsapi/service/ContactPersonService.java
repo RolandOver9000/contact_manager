@@ -45,16 +45,16 @@ public class ContactPersonService {
     }
 
 
-    public void saveContactPerson(IncomingContactPersonDto contactPersonDto) {
+    public long saveContactPerson(IncomingContactPersonDto contactPersonDto) {
         Company contactCompany = companyRepository
                 .findByName(contactPersonDto.getCompanyName())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found by name: " +
                         contactPersonDto.getCompanyName()));
         ContactPerson contactPerson = transformIncomingContactPersonToContactPerson(contactPersonDto, contactCompany);
-        contactPersonRepository.save(contactPerson);
+        return contactPersonRepository.save(contactPerson).getId();
     }
 
-    public void updateContactPersonById(IncomingContactPersonDto contactPersonDto, long id) {
+    public long updateContactPersonById(IncomingContactPersonDto contactPersonDto, long id) {
         ContactPerson storedContactPerson = contactPersonRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " +
@@ -64,7 +64,7 @@ public class ContactPersonService {
                 contactPersonDto, storedContactPerson.getCompany());
         updatedContactPerson.setId(storedContactPerson.getId());
         updatedContactPerson.setCreationDateTime(storedContactPerson.getCreationDateTime());
-        contactPersonRepository.save(updatedContactPerson);
+        return contactPersonRepository.save(updatedContactPerson).getId();
     }
 
     public void changeContactPersonToDeletedById(long id) {
