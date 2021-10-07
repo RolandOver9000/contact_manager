@@ -27,11 +27,12 @@ public class ContactPersonService {
     private CompanyRepository companyRepository;
     private static final int NUMBER_OF_CONTACTS_PER_PAGE = 10;
 
-    public List<OutgoingListedContactPersonDto> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
+    public List<OutgoingListedContactPersonDto> getAllContactPersonAscendingByFirstNameByPageByStatus(int pageNumber,
+                                                                                                      Status status) {
         Pageable sortedByFirstNameDesc =
                 PageRequest.of(pageNumber, NUMBER_OF_CONTACTS_PER_PAGE, Sort.by("firstName").ascending());
         List<ContactPerson> foundContacts = contactPersonRepository
-                .findAllByStatus(Status.ACTIVE, sortedByFirstNameDesc).getContent();
+                .findAllByStatus(status, sortedByFirstNameDesc).getContent();
         return foundContacts.stream()
                 .map(this::transformToListedContactPerson)
                 .collect(Collectors.toList());

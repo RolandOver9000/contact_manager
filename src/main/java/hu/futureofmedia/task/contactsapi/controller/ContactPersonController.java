@@ -3,8 +3,8 @@ package hu.futureofmedia.task.contactsapi.controller;
 import hu.futureofmedia.task.contactsapi.model.dto.IncomingContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
+import hu.futureofmedia.task.contactsapi.model.entities.Status;
 import hu.futureofmedia.task.contactsapi.service.ContactPersonService;
-import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,13 @@ public class ContactPersonController {
     @Autowired
     private ContactPersonService contactPersonService;
 
-    @GetMapping("/active")
-    public ResponseEntity<List<OutgoingListedContactPersonDto>> getAllActiveContactPersonsByPage(
-                                                        @RequestParam("page") int pageNumber) {
+    @GetMapping("")
+    public ResponseEntity<List<OutgoingListedContactPersonDto>> getContactPersonsByPageByStatus(
+                                                        @RequestParam("page") int pageNumber,
+                                                        @RequestParam("status") Status status) {
         try {
             return ResponseEntity.ok(contactPersonService
-                    .getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber));
+                    .getAllContactPersonAscendingByFirstNameByPageByStatus(pageNumber, status));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting active contacts on page: " + pageNumber);
