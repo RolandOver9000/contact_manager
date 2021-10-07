@@ -27,36 +27,37 @@ public class ContactPersonService {
     private CompanyRepository companyRepository;
     private static final int NUMBER_OF_CONTACTS_PER_PAGE = 10;
 
-    public List<OutgoingListedContactPersonDto> getAllActiveContactPersonAscendingByFirstNameByPage(int pageNumber) {
+    public List<OutgoingListedContactPersonDto> getAllContactPersonAscendingByFirstNameByPageByStatus(int pageNumber,
+                                                                                                      Status status) {
         Pageable sortedByFirstNameDesc =
                 PageRequest.of(pageNumber, NUMBER_OF_CONTACTS_PER_PAGE, Sort.by("firstName").ascending());
         List<ContactPerson> foundContacts = contactPersonRepository
-                .findAllByStatus(Status.ACTIVE, sortedByFirstNameDesc).getContent();
+                .findAllByStatus(status, sortedByFirstNameDesc).getContent();
         return foundContacts.stream()
                 .map(this::transformToListedContactPerson)
                 .collect(Collectors.toList());
     }
 
-    public OutgoingDetailedContactPersonDto getContactPersonByEmail(String email) {
+    public OutgoingDetailedContactPersonDto getContactPersonById(long id) {
         return contactPersonRepository
-                .findByEmail(email)
+                .findById(id)
                 .map(this::transformToDetailedContactPerson)
-                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " + email));
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
     }
 
 
-    public void saveContactPerson(IncomingContactPersonDto contactPersonDto) {
+    public long saveContactPerson(IncomingContactPersonDto contactPersonDto) {
         Company contactCompany = companyRepository
                 .findByName(contactPersonDto.getCompanyName())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found by name: " +
                         contactPersonDto.getCompanyName()));
         ContactPerson contactPerson = transformIncomingContactPersonToContactPerson(contactPersonDto, contactCompany);
-        contactPersonRepository.save(contactPerson);
+        return contactPersonRepository.save(contactPerson).getId();
     }
 
-    public void updateContactPerson(IncomingContactPersonDto contactPersonDto) {
+    public long updateContactPersonById(IncomingContactPersonDto contactPersonDto, long id) {
         ContactPerson storedContactPerson = contactPersonRepository
-                .findByEmail(contactPersonDto.getEmail())
+                .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " +
                         contactPersonDto.getEmail()));
 
@@ -64,19 +65,20 @@ public class ContactPersonService {
                 contactPersonDto, storedContactPerson.getCompany());
         updatedContactPerson.setId(storedContactPerson.getId());
         updatedContactPerson.setCreationDateTime(storedContactPerson.getCreationDateTime());
-        contactPersonRepository.save(updatedContactPerson);
+        return contactPersonRepository.save(updatedContactPerson).getId();
     }
 
-    public void changeContactPersonToDeletedByEmail(String email) {
+    public void changeContactPersonToDeletedById(long id) {
         ContactPerson storedContactPerson = contactPersonRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by email: " + email));
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contact person not found by id: " + id));
         storedContactPerson.setStatus(Status.DELETED);
         contactPersonRepository.save(storedContactPerson);
     }
 
     private ContactPerson transformIncomingContactPersonToContactPerson(IncomingContactPersonDto contactPersonDto, Company contactCompany) {
         return ContactPerson.builder()
+                .id(contactPersonDto.getId())
                 .firstName(contactPersonDto.getFirstName())
                 .lastName(contactPersonDto.getLastName())
                 .comment(contactPersonDto.getComment())
@@ -98,6 +100,7 @@ public class ContactPersonService {
 
     private OutgoingDetailedContactPersonDto transformToDetailedContactPerson(ContactPerson contactPerson) {
         return OutgoingDetailedContactPersonDto.builder()
+                .id(contactPerson.getId())
                 .firstName(contactPerson.getFirstName())
                 .lastName(contactPerson.getLastName())
                 .companyName(contactPerson.getCompany().getName())

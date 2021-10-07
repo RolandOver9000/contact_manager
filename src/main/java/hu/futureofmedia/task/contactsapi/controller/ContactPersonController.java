@@ -3,6 +3,7 @@ package hu.futureofmedia.task.contactsapi.controller;
 import hu.futureofmedia.task.contactsapi.model.dto.IncomingContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingDetailedContactPersonDto;
 import hu.futureofmedia.task.contactsapi.model.dto.OutgoingListedContactPersonDto;
+import hu.futureofmedia.task.contactsapi.model.entities.Status;
 import hu.futureofmedia.task.contactsapi.service.ContactPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,55 +21,55 @@ public class ContactPersonController {
     @Autowired
     private ContactPersonService contactPersonService;
 
-    @GetMapping("/active")
-    public ResponseEntity<List<OutgoingListedContactPersonDto>> getAllActiveContactPersonsByPage(
-                                                        @RequestParam("page") int pageNumber) {
+    @GetMapping("")
+    public ResponseEntity<List<OutgoingListedContactPersonDto>> getContactPersonsByPageByStatus(
+                                                        @RequestParam("page") int pageNumber,
+                                                        @RequestParam("status") Status status) {
         try {
             return ResponseEntity.ok(contactPersonService
-                    .getAllActiveContactPersonAscendingByFirstNameByPage(pageNumber));
+                    .getAllContactPersonAscendingByFirstNameByPageByStatus(pageNumber, status));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting active contacts on page: " + pageNumber);
         }
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{id}")
     public ResponseEntity<OutgoingDetailedContactPersonDto> getContactPersonByEmail(
-            @PathVariable(value="email") String email) {
+            @PathVariable(value="id") long id) {
         try {
-            return ResponseEntity.ok(contactPersonService.getContactPersonByEmail(email));
+            return ResponseEntity.ok(contactPersonService.getContactPersonById(id));
         } catch (Exception e) {
             throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by email: " + email);
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during getting contact by id: " + id);
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<String> saveContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+    public ResponseEntity<Long> saveContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
         try {
-            contactPersonService.saveContactPerson(contactPersonDto);
-            return ResponseEntity.ok("Contact person saved successfully.");
+            return ResponseEntity.ok(contactPersonService.saveContactPerson(contactPersonDto));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during saving contact.");
         }
     }
 
-    @PutMapping("")
-    public ResponseEntity<String> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Long> updateContactPerson(@RequestBody IncomingContactPersonDto contactPersonDto,
+                                                      @PathVariable(value="id") long id) {
         try {
-            contactPersonService.updateContactPerson(contactPersonDto);
-            return ResponseEntity.ok("Contact person updated successfully.");
+            return ResponseEntity.ok(contactPersonService.updateContactPersonById(contactPersonDto, id));
         } catch (Exception e) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR, "Error during updating contact.");
         }
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteContactPersonByEmail(@PathVariable(value="email") String email) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteContactPersonByEmail(@PathVariable(value="id") long id) {
         try {
-            contactPersonService.changeContactPersonToDeletedByEmail(email);
+            contactPersonService.changeContactPersonToDeletedById(id);
             return ResponseEntity.ok("Contact person deleted successfully.");
         } catch (Exception e) {
             throw new ResponseStatusException(
