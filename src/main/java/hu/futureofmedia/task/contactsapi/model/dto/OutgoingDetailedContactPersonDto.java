@@ -9,6 +9,7 @@ import java.util.Date;
 @Builder
 public class OutgoingDetailedContactPersonDto {
 
+    private long id;
     private String firstName;
     private String lastName;
     private String email;

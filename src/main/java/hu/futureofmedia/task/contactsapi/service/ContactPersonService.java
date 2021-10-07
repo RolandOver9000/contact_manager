@@ -77,6 +77,7 @@ public class ContactPersonService {
 
     private ContactPerson transformIncomingContactPersonToContactPerson(IncomingContactPersonDto contactPersonDto, Company contactCompany) {
         return ContactPerson.builder()
+                .id(contactPersonDto.getId())
                 .firstName(contactPersonDto.getFirstName())
                 .lastName(contactPersonDto.getLastName())
                 .comment(contactPersonDto.getComment())
@@ -98,6 +99,7 @@ public class ContactPersonService {
 
     private OutgoingDetailedContactPersonDto transformToDetailedContactPerson(ContactPerson contactPerson) {
         return OutgoingDetailedContactPersonDto.builder()
+                .id(contactPerson.getId())
                 .firstName(contactPerson.getFirstName())
                 .lastName(contactPerson.getLastName())
                 .companyName(contactPerson.getCompany().getName())
