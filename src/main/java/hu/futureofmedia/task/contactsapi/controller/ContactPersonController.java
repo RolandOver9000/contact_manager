@@ -66,10 +66,10 @@ public class ContactPersonController {
         }
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<String> deleteContactPersonByEmail(@PathVariable(value="email") String email) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteContactPersonByEmail(@PathVariable(value="id") long id) {
         try {
-            contactPersonService.changeContactPersonToDeletedByEmail(email);
+            contactPersonService.changeContactPersonToDeletedById(id);
             return ResponseEntity.ok("Contact person deleted successfully.");
         } catch (Exception e) {
             throw new ResponseStatusException(
